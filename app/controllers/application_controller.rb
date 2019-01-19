@@ -11,4 +11,35 @@ class ApplicationController < Sinatra::Base
   get '/' do
 
   end
+
+  get '/article/:id'do
+
+  end
+
+  get '/articles/new' do
+
+  erb :new
+  end
+
+  get '/articles' do
+
+  end
+
+  post '/articles' do
+
+  end
+
+  get '/articles/:id/edit' do
+
+  erb :edit
+  end
+
+  patch '/articles/:id' do
+
+  end
+
+  post '/articles/:id/delete' do
+
+  end
+
 end
