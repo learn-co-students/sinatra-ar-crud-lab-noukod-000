@@ -1,4 +1,3 @@
-
 require_relative '../../config/environment'
 
 class ApplicationController < Sinatra::Base
@@ -13,53 +12,47 @@ class ApplicationController < Sinatra::Base
 
   end
 
-# Allow user to create a new Post
+  # Allow user to create a new Post
   get '/posts/new' do
     erb :new
   end
 
-# Display the posts
+  # this is where we make new posts that save to our database!
   post '/posts' do
-    Post.create(:name => params[:name], :content => params[:content])
-    @posts = Post.all
+     Post.create(params)
+     redirect '/posts'
+   end
 
-    erb :index
-  end
+  # This allows us to see our posts
+   get '/posts' do
+     @posts = Post.all
+     erb :index
+   end
 
-  get '/posts' do
-    @posts = Post.all
-    erb :index
-  end
+   # This allows to get the posts from the database
+   get '/posts/:id' do
+     @post = Post.find(params["id"])
+     erb :show
+   end
 
-  # Allow to update the Record
-  get '/posts/:id' do
-    @post = Post.find(params[:id])
-    if params.keys.include? "name"
+   # Allow to update the Record
+   get '/posts/:id/edit' do
+     @post = Post.find(params["id"])
+     erb :edit
+   end
+
+  # Allow to update the Record in the database
+    patch '/posts/:id' do
       Post.update(params[:id], name: params[:name], content: params[:content])
       @post = Post.find(params[:id])
+
+      erb :show
     end
 
-    erb :show
-  end
-
-  # Allow to edit and update the Record
-  get '/posts/:id/edit' do
-    @post = Post.find(params[:id])
-
-    erb :edit
-  end
-
-  patch '/posts/:id' do
-    Post.update(params[:id], name: params[:name], content: params[:content])
-    @post = Post.find(params[:id])
-
-    erb :show
-  end
-
-  # Allow to delete a Record
-  delete '/posts/:id/delete' do
-    Post.delete params[:id]
-    redirect '/posts'
-  end
+    # Allow to delete a Record
+    delete '/posts/:id/delete' do
+      Post.delete params[:id]
+      redirect '/posts'
+    end
 
 end
